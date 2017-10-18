@@ -1,2 +1,2 @@
 # refy
-Simple JavaFX program to help managing scientific articles
+Simple JavaFX program to help manage scientific articles
