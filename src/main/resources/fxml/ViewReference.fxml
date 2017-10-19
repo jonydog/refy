@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonydog.refy.controllers.ViewReferenceController">
+   <children>
+      <Label contentDisplay="CENTER" layoutX="283.0" layoutY="35.0" prefHeight="35.0" prefWidth="500.0" text="title" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <Label layoutX="283.0" layoutY="64.0" text="Authors" />
+      <Label layoutX="100.0" layoutY="83.0" prefHeight="35.0" prefWidth="500.0" text="authors" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+      <TableView layoutX="44.0" layoutY="127.0" prefHeight="246.0" prefWidth="550.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
+        <columns>
+          <TableColumn prefWidth="549.0" text="Note title" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

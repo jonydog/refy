@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="528.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonydog.refy.controllers.MainWindowController">
+   <children>
+      <TableView fx:id="mainTable" layoutX="26.0" layoutY="41.0" prefHeight="465.0" prefWidth="619.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="60.0">
+        <columns>
+          <TableColumn prefWidth="322.0" text="Title" />
+          <TableColumn prefWidth="310.0" text="Authors" />
+        </columns>
+      </TableView>
+      <Button fx:id="newButton" layoutX="421.0" layoutY="20.0" mnemonicParsing="false" onAction="#newButtonClicked" prefHeight="27.0" prefWidth="63.0" text="New" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="editButton" layoutX="501.0" layoutY="20.0" mnemonicParsing="false" onAction="#editButtonClicked" prefHeight="27.0" prefWidth="63.0" text="Edit" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="allNotesButton" layoutX="579.0" layoutY="20.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="78.0" text="All notes" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0" />
+      <TextField fx:id="searchField" layoutX="25.0" layoutY="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="newButton1" layoutX="342.0" layoutY="20.0" mnemonicParsing="false" onAction="#viewButtonClicked" prefHeight="27.0" prefWidth="63.0" text="View" AnchorPane.rightAnchor="280.0" />
+   </children>
+</AnchorPane>
