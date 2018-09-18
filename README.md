@@ -1,2 +1,2 @@
 # refy
-JavaFX program to help manage scientific articles
+JavaFX program to help manage documents by adding metadata
