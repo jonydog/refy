@@ -27,6 +27,9 @@ public class ReferencesState extends StateSource {
     @Override
     public void refreshState(RefyErrors errors) {
 
+        // get all refs
+        this.currentReferences.clear();
+        this.currentReferences.addAll( this.referenceService.getAllReferences(errors) );
     }
 
     @Override
@@ -34,9 +37,11 @@ public class ReferencesState extends StateSource {
 
         //instantiate
         this.currentReferences = FXCollections.observableArrayList();
+        this.currentReferences.addAll( this.referenceService.getAllReferences(null) );
         this.selectedReference = new SimpleObjectProperty<>();
 
         //load
-        this.currentReferences.addAll( this.referenceService.getAllReferences( new RefyErrors() ) );
+        //this.currentReferences.addAll( this.referenceService.getAllReferences( new RefyErrors() ) );
+        //this.currentReferences.addAll( this.referenceService.getAllReferences( new RefyErrors() ) );
     }
 }

@@ -21,4 +21,5 @@ public class RefyErrors {
     public boolean hasErrors(){
         return ! this.errorMessages.isEmpty();
     }
+
 }

@@ -1,5 +1,6 @@
 package com.jonydog.refy.app;
 
+import com.jonydog.refy.jobs.ReferenceKeeper;
 import com.jonydog.refy.util.StageManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -7,24 +8,22 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.util.Locale;
 
 @SpringBootApplication
-@EntityScan(basePackages={"com.jonydog.refy.model"})
-@EnableJpaRepositories(basePackages = {"com.jonydog.refy.daos"})
 @ComponentScan(
         basePackages = {
                 "com.jonydog.refy.controllers",
                 "com.jonydog.refy.business",
+                "com.jonydog.refy.daos",
                 "com.jonydog.refy.statesources",
-                "com.jonydog.refy.configs"
+                "com.jonydog.refy.configs",
+                "com.jonydog.refy.jobs"
         }
 )
 public class MainApp extends Application {
@@ -39,7 +38,7 @@ public class MainApp extends Application {
 
         // TODO Auto-generated method stub
         Scene scene = new Scene((Parent) this.rootNode, 900, 900);
-        stage.setTitle("refy");
+        stage.setTitle("Refy");
         stage.setScene(scene);
         // stage.setMaximized(true);
         stage.show();
@@ -51,6 +50,12 @@ public class MainApp extends Application {
     @Override
     public void init(){
         this.springContext = SpringApplication.run(MainApp.class);
+
+        //init state sources
+        /*for( StateSource s : this.springContext.getBeansOfType(StateSource.class).values() ){
+            s.initStateSource();
+        }*/
+
         try {
             StageManager.getInstance().setApplicationContext(springContext);
             StageManager.getInstance().loadAllViews();
@@ -61,5 +66,13 @@ public class MainApp extends Application {
 
         // set default language
         LocaleContextHolder.setDefaultLocale( new Locale("pt"));
+    }
+
+
+    @Override
+    public void stop(){
+
+        this.springContext.getBean(ReferenceKeeper.class).getIsAppClosed().set(true);
+
     }
 }

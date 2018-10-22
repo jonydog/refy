@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +26,10 @@ public class StageManager {
 	//Main stage
 	@Getter
 	private Stage mainStage;
+
 	@Getter
 	private Stage modalStage;
+
 	@Getter
 	private Stage debugStage;
 
@@ -126,8 +127,9 @@ public class StageManager {
 			URL u = l.nextElement();
 			logger.debug(u);
 			// get the filepath of this packa
+            System.out.println("Path: "+u.getPath());
 			if( u.getPath().contains("refy") ){
-				packageDirs.add( new  File(  u.getPath() + "/fxml" ) );
+				packageDirs.add( new  File(  u.getPath() + "\\fxml" ) );
 			}
 		}
 		

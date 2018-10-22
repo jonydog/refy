@@ -1,8 +1,7 @@
 package com.jonydog.refy.daos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jonydog.refy.model.Reference;
-import com.jonydog.refy.util.RefyErrors;
+import com.jonydog.refy.model.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,18 +9,18 @@ import java.io.File;
 import java.io.IOException;
 
 @Component
-public class ReferenceDAO {
+public class SettingsDAO {
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Reference[] getAllReferences(){
+    public Settings get(){
 
-        File file = new File("refy.json");
+        File file = new File("refySettings.json");
         try{
             if( file.exists() ){
-                Reference[] refs = this.objectMapper.readValue( file,Reference[].class);
-                return refs;
+                Settings settings = this.objectMapper.readValue( file,Settings.class);
+                return settings;
             }else{
                 return null;
             }
@@ -32,15 +31,14 @@ public class ReferenceDAO {
         }
     }
 
-    public void save(Reference[] refs, RefyErrors errors) {
+    public boolean save(Settings settings){
 
-        File file = new File("refy.json");
+        File file = new File("refySettings.json");
         try {
-            this.objectMapper.writeValue(file, refs);
+            this.objectMapper.writeValue(file,settings);
+            return true;
         } catch (IOException e) {
-            errors.addError(
-                    "Could not save to file"
-            );
+            return false;
         }
 
     }

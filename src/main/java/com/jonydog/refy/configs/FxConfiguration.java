@@ -1,5 +1,6 @@
 package com.jonydog.refy.configs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jonydog.refy.util.StageManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,4 +14,11 @@ public class FxConfiguration {
     public StageManager stageManager() throws IOException {
         return StageManager.getInstance();
     }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
+    }
+
+
 }
