@@ -1,8 +1,12 @@
 package com.jonydog.refy.util;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class AlertUtils {
 
@@ -37,6 +41,25 @@ public class AlertUtils {
 
         alert.show();
     }
+
+    public static void confirmationAlert(Consumer<Void> callback, String title, String headerText, String contentText, Stage ownerStage){
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.initOwner(ownerStage);
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            callback.accept(null);
+        } else {
+            //do nothing
+        }
+    }
+
+
 
 
 }

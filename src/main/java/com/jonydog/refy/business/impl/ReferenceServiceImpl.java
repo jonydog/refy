@@ -5,12 +5,16 @@ import com.jonydog.refy.daos.ReferenceDAO;
 import com.jonydog.refy.jobs.ReferenceKeeper;
 import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.util.RefyErrors;
+import com.jonydog.refy.util.StageManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 @Component
@@ -21,6 +25,9 @@ public class ReferenceServiceImpl implements ReferenceService{
 
     @Autowired
     private ReferenceDAO referenceDAO;
+
+    @Autowired
+    private StageManager stageManager;
 
     @Autowired
     private Validator validator;
@@ -69,21 +76,45 @@ public class ReferenceServiceImpl implements ReferenceService{
             errors.addError("Invalid Reference");
             return;
         }
-
         this.allRefs.add(reference);
+
+        //update terms mapping
+        Executors.newSingleThreadExecutor().submit(()->{this.updateTermsToRefsMapping(reference);  }  );
     }
 
     @Override
-    public void udpateReference(Reference reference, RefyErrors errors) {
+    public void updateReference(Reference reference, Reference  newVersion, RefyErrors errors){
+
+        Set<ConstraintViolation<Reference>> violations  = this.validator.validate(newVersion);
+        if( violations.size() > 0 ){
+            System.out.println( violations );
+            errors.addError("Invalid Reference");
+            return;
+        }
+
+        reference.setTitle( newVersion.getTitle() );
+        reference.setObservations( newVersion.getObservations() );
+        reference.setLink( newVersion.getLink() );
+        reference.setAuthorsNames( newVersion.getAuthorsNames() );
+        reference.setFilePath( newVersion.getFilePath() );
+        reference.setKeywords( newVersion.getKeywords() );
 
     }
 
     @Override
-    public void removeReference(Long referenceId, RefyErrors errors) {
+    public void removeReference(Reference reference,RefyErrors errors) {
+
+        this.allRefs.remove( reference );
 
     }
 
     private void initTermsToRefsMapping(){
+        System.out.println("Init terms to refs mapping");
+        Thread.currentThread().interrupt();
+
+    }
+
+    private void updateTermsToRefsMapping(Reference newref){
         System.out.println("Init terms to refs mapping");
         Thread.currentThread().interrupt();
 

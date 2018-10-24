@@ -20,7 +20,7 @@
             <TextArea fx:id="observationsField" layoutY="310.0" prefHeight="106.0" prefWidth="573.0" />
             <Label layoutX="-3.0" layoutY="283.0" text="Observations" />
          </children>
-      </Group>
+   </Group>
       <Button fx:id="addButton" layoutX="454.0" layoutY="364.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="78.0" prefWidth="144.0" text="ADD REFERENCE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="25.0" />
       <AnchorPane layoutX="34.0" layoutY="687.0" prefHeight="78.0" prefWidth="394.0" style="-fx-background-color: #ddd;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
          <children>
@@ -29,5 +29,6 @@
       </AnchorPane>
       <Label layoutX="25.0" layoutY="472.0" prefHeight="17.0" prefWidth="37.0" text="Link:" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="25.0" />
       <TextField fx:id="linkField" layoutX="59.0" layoutY="468.0" prefHeight="25.0" prefWidth="534.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="26.0" />
+      <Button layoutX="549.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="25.0" prefWidth="62.0" text="Back" AnchorPane.rightAnchor="25.0" />
    </children>
 </AnchorPane>

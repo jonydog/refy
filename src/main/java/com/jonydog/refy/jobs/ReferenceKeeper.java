@@ -30,13 +30,16 @@ public class ReferenceKeeper {
     public void initPersistenceJob(){
 
         this.executorService = Executors.newSingleThreadExecutor();
-        this.executorService.execute( new Thread( ()->{ this.persistenceJob(); } ) );
-
+        Thread worker = new Thread( ()->{ this.persistenceJob(); } );
+        this.executorService.execute( worker );
         this.executorService.shutdown();
+
     }
 
 
     private void persistenceJob(){
+
+        System.out.println("Persistence job");
 
         while( ! this.isAppClosed.get()) {
 
@@ -47,9 +50,14 @@ public class ReferenceKeeper {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
+
         }
+
+        System.exit(0);
     }
 
 

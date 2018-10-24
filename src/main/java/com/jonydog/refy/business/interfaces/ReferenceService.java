@@ -13,7 +13,7 @@ public interface ReferenceService {
 
     void addReference(Reference reference, RefyErrors errors);
 
-    void udpateReference(Reference  reference,RefyErrors errors);
+    void updateReference(Reference reference, Reference  newVersion, RefyErrors errors);
 
-    void removeReference(Long referenceId,RefyErrors errors);
+    void removeReference(Reference toRemove,RefyErrors errors);
 }

@@ -14,11 +14,11 @@
           <TableColumn prefWidth="310.0" text="Authors" />
         </columns>
       </TableView>
-      <Button fx:id="newButton" layoutX="421.0" layoutY="20.0" mnemonicParsing="false" onAction="#newButtonClicked" prefHeight="27.0" prefWidth="63.0" text="New" AnchorPane.rightAnchor="199.8" AnchorPane.topAnchor="25.0" />
-      <Button fx:id="editButton" layoutX="501.0" layoutY="20.0" mnemonicParsing="false" onAction="#editButtonClicked" prefHeight="27.0" prefWidth="63.0" text="Edit" AnchorPane.rightAnchor="119.79999999999995" AnchorPane.topAnchor="25.0" />
-      <Button fx:id="allNotesButton" layoutX="579.0" layoutY="20.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="78.0" text="All notes" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
-      <TextField fx:id="searchField" layoutX="25.0" layoutY="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
-      <Button fx:id="newButton1" layoutX="341.0" layoutY="20.0" mnemonicParsing="false" onAction="#viewButtonClicked" prefHeight="27.0" prefWidth="63.0" text="View" AnchorPane.rightAnchor="279.8" AnchorPane.topAnchor="25.0" />
-      <Button fx:id="settingsButton" layoutX="607.0" layoutY="489.0" mnemonicParsing="false" onAction="#settingsButtonClicked" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0" />
+      <Button fx:id="newButton" layoutX="522.0" layoutY="24.0" mnemonicParsing="false" onAction="#newButtonClicked" prefHeight="27.0" prefWidth="63.0" text="New" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="24.0" />
+      <Button fx:id="editButton" layoutX="596.0" layoutY="24.0" mnemonicParsing="false" onAction="#editButtonClicked" prefHeight="27.0" prefWidth="63.0" text="Edit" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="24.0" />
+      <TextField fx:id="searchField" layoutX="25.0" layoutY="20.0" prefHeight="25.0" prefWidth="195.0" promptText="Authors, titles, keywords..." AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <Button fx:id="settingsButton" layoutX="607.0" layoutY="489.0" mnemonicParsing="false" onAction="#settingsButtonClicked" prefHeight="30.0" prefWidth="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0" />
+      <Button fx:id="deleteButton" layoutX="25.0" layoutY="488.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="30.0" prefWidth="78.0" text="Delete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="25.0" />
+      <Button layoutX="227.0" layoutY="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Search" AnchorPane.leftAnchor="225.0" />
    </children>
 </AnchorPane>
