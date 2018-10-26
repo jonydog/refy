@@ -15,15 +15,18 @@ public class ReferenceDAO {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Reference[] getAllReferences(){
+    private static final String REFY_FILENAME = "refy.json";
 
-        File file = new File("refy.json");
+    public Reference[] getAllReferences(String homeFolder){
+
+        File file = new File(homeFolder+"/"+REFY_FILENAME);
         try{
             if( file.exists() ){
                 Reference[] refs = this.objectMapper.readValue( file,Reference[].class);
                 return refs;
             }else{
-                return null;
+                Reference[] refs = new Reference[0];
+                return refs;
             }
         }
         catch (IOException e) {
@@ -32,10 +35,11 @@ public class ReferenceDAO {
         }
     }
 
-    public void save(Reference[] refs, RefyErrors errors) {
+    public void save(Reference[] refs, String homeFolder, RefyErrors errors) {
 
-        File file = new File("refy.json");
+        File file = new File(homeFolder+"/"+REFY_FILENAME);
         try {
+            System.out.println("File written:"+file.getAbsolutePath());
             this.objectMapper.writeValue(file, refs);
         } catch (IOException e) {
             errors.addError(

@@ -22,9 +22,10 @@
          </children>
    </Group>
       <Button fx:id="addButton" layoutX="454.0" layoutY="364.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="78.0" prefWidth="144.0" text="ADD REFERENCE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="25.0" />
-      <AnchorPane layoutX="34.0" layoutY="687.0" prefHeight="78.0" prefWidth="394.0" style="-fx-background-color: #ddd;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
+      <AnchorPane fx:id="dropArea" layoutX="34.0" layoutY="687.0" prefHeight="78.0" prefWidth="394.0" style="-fx-background-color: #ddd;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
          <children>
             <Button fx:id="chooseFileButton" layoutX="59.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseFileButtonClicked" prefHeight="78.0" prefWidth="77.0" text="Choose file" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="fileLabel" layoutX="87.0" layoutY="6.0" prefHeight="71.0" prefWidth="310.0" text="Label" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
       <Label layoutX="25.0" layoutY="472.0" prefHeight="17.0" prefWidth="37.0" text="Link:" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="25.0" />

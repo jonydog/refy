@@ -18,6 +18,8 @@ public class ReferencesState extends StateSource {
     // business services
     @Autowired
     private ReferenceService referenceService;
+    @Autowired
+    private SettingsState settingsState;
 
     @Getter
     private ObservableList<Reference> currentReferences;
@@ -35,15 +37,18 @@ public class ReferencesState extends StateSource {
 
         // get all refs
         this.currentReferences.clear();
-        this.currentReferences.addAll( this.referenceService.getAllReferences(errors) );
+        this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ) );
+
     }
+
 
     @Override
     public void init() {
 
         //instantiate
         this.currentReferences = FXCollections.observableArrayList();
-        this.currentReferences.addAll( this.referenceService.getAllReferences(null) );
+        RefyErrors errors = new RefyErrors();
+        this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(),errors) );
         this.selectedReference = new SimpleObjectProperty<>();
         this.editMode = new SimpleBooleanProperty(false);
 

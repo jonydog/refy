@@ -52,6 +52,21 @@ public class ViewReferenceController implements Initializable {
     @FXML
     private void linkButton(){
 
+        String url = this.referencesState.getSelectedReference().get().getLink();
+        if( url==null ){
+            return;
+        }
+        ;
+        Settings s = this.settingsState.getSettings();
+        if( s.getBrowserPath()!=null && !s.getPdfReaderPath().isEmpty()    ){
+
+            try {
+                Runtime.getRuntime().exec( s.getBrowserPath() + " " + url  );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @FXML
@@ -64,11 +79,13 @@ public class ViewReferenceController implements Initializable {
             return;
         }
 
-        File f = new File(filePath);
+        File f = new File( this.settingsState.getSettings().getHomeFolder() + filePath);
+
+        System.out.println("File to be opened:"+f.getAbsolutePath());
+
         Settings s = this.settingsState.getSettings();
         if( s.getPdfReaderPath()!=null && !s.getPdfReaderPath().isEmpty() && f.exists()   ){
-            String command = s.getPdfReaderPath() + " " + f.getAbsolutePath();
-            System.out.println(command);
+            String command = s.getPdfReaderPath() + " " + "\"" + f.getAbsolutePath() + "\"" ;
             try {
                 Runtime.getRuntime().exec( command );
             } catch (IOException e) {

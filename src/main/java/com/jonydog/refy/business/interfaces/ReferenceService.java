@@ -4,10 +4,11 @@ import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.util.RefyErrors;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 public interface ReferenceService {
 
-    ArrayList<Reference> getAllReferences(RefyErrors errors);
+    ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors);
 
     ArrayList<Reference> searchReferences(String searchTerm);
 
@@ -16,4 +17,6 @@ public interface ReferenceService {
     void updateReference(Reference reference, Reference  newVersion, RefyErrors errors);
 
     void removeReference(Reference toRemove,RefyErrors errors);
+
+    AtomicLong getLastModified();
 }

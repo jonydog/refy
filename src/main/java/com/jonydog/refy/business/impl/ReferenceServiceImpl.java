@@ -6,6 +6,7 @@ import com.jonydog.refy.jobs.ReferenceKeeper;
 import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.util.RefyErrors;
 import com.jonydog.refy.util.StageManager;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class ReferenceServiceImpl implements ReferenceService{
@@ -32,16 +34,18 @@ public class ReferenceServiceImpl implements ReferenceService{
     @Autowired
     private Validator validator;
 
-    private HashMap<String,Reference> termToRefsMapping;
 
+    private HashMap<String,Reference> termToRefsMapping;
     private ArrayList<Reference> allRefs;
+    @Getter
+    private AtomicLong lastModified = new AtomicLong(0L);
 
     @Override
-    public ArrayList<Reference> getAllReferences(RefyErrors errors) {
+    public ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors) {
 
         // if cached array is null
         if(this.allRefs==null) {
-            Reference[] refArray = this.referenceDAO.getAllReferences();
+            Reference[] refArray = this.referenceDAO.getAllReferences(homeFolder);
             if(refArray!=null){
 
                 this.allRefs =  new ArrayList<>( Arrays.asList( refArray ) );
@@ -77,6 +81,8 @@ public class ReferenceServiceImpl implements ReferenceService{
             return;
         }
         this.allRefs.add(reference);
+        //update last modified
+        this.lastModified.set( System.currentTimeMillis() );
 
         //update terms mapping
         Executors.newSingleThreadExecutor().submit(()->{this.updateTermsToRefsMapping(reference);  }  );
@@ -99,6 +105,9 @@ public class ReferenceServiceImpl implements ReferenceService{
         reference.setFilePath( newVersion.getFilePath() );
         reference.setKeywords( newVersion.getKeywords() );
 
+        //update last modified
+        this.lastModified.set( System.currentTimeMillis() );
+
     }
 
     @Override
@@ -106,7 +115,10 @@ public class ReferenceServiceImpl implements ReferenceService{
 
         this.allRefs.remove( reference );
 
+        //update last modified
+        this.lastModified.set( System.currentTimeMillis() );
     }
+
 
     private void initTermsToRefsMapping(){
         System.out.println("Init terms to refs mapping");

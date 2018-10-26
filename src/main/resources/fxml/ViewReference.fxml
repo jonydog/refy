@@ -27,6 +27,6 @@
          <font>
             <Font size="14.0" />
          </font></Label>
-      <Button layoutX="431.0" layoutY="175.0" mnemonicParsing="false" onAction="#linkButton" prefHeight="25.0" prefWidth="73.0" text="Open link" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="175.0" />
+      <Button layoutX="431.0" layoutY="175.0" mnemonicParsing="false" onAction="#linkButton" prefHeight="25.0" prefWidth="73.0" text="Open links" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="175.0" />
    </children>
 </AnchorPane>

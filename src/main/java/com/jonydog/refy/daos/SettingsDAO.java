@@ -8,15 +8,19 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 
+
+
 @Component
 public class SettingsDAO {
+
+    public static final String SETTINGS_FILE_NAME = "refySettings.json";
 
     @Autowired
     private ObjectMapper objectMapper;
 
     public Settings get(){
 
-        File file = new File("refySettings.json");
+        File file = new File(SETTINGS_FILE_NAME);
         try{
             if( file.exists() ){
                 Settings settings = this.objectMapper.readValue( file,Settings.class);
@@ -33,7 +37,7 @@ public class SettingsDAO {
 
     public boolean save(Settings settings){
 
-        File file = new File("refySettings.json");
+        File file = new File(SETTINGS_FILE_NAME);
         try {
             this.objectMapper.writeValue(file,settings);
             return true;

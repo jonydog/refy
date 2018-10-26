@@ -2,6 +2,7 @@ package com.jonydog.refy.controllers;
 
 import com.jonydog.refy.business.interfaces.SettingsService;
 import com.jonydog.refy.model.Settings;
+import com.jonydog.refy.statesources.ReferencesState;
 import com.jonydog.refy.statesources.SettingsState;
 import com.jonydog.refy.util.AlertUtils;
 import com.jonydog.refy.util.RefyErrors;
@@ -24,9 +25,10 @@ public class SettingsDialogController implements Initializable {
 
     @Autowired
     private SettingsService settingsService;
-
     @Autowired
     private SettingsState settingsState;
+    @Autowired
+    private ReferencesState referenceState;
 
     @Autowired
     private StageManager stageManager;
@@ -94,6 +96,7 @@ public class SettingsDialogController implements Initializable {
         }
 
         this.settingsState.refreshState(errors);
+        this.referenceState.refreshState(errors);
     }
 
     private void assignAproppriateExtension(FileChooser fileChooser){
@@ -112,5 +115,8 @@ public class SettingsDialogController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         this.homeFolderField.setText( this.settingsState.getSettings().getHomeFolder() );
+        this.browserField.setText( this.settingsState.getSettings().getBrowserPath()  );
+        this.pdfReaderField.setText( this.settingsState.getSettings().getPdfReaderPath() );
     }
+
 }

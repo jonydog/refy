@@ -25,6 +25,7 @@ public class SettingsState extends StateSource {
     @Override
     public void init() {
 
-        this.settings = this.settingsService.get(null);
+        RefyErrors errors = new RefyErrors();
+        this.settings = this.settingsService.get(errors);
     }
 }

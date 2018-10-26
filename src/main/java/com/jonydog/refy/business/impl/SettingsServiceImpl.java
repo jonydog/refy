@@ -29,7 +29,7 @@ public class SettingsServiceImpl implements SettingsService {
         }
         else{
             errors.addError("No settings");
-            return null;
+            return new Settings();
         }
     }
 

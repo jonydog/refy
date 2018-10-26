@@ -1,24 +1,27 @@
 package com.jonydog.refy.controllers;
 
 import com.jonydog.refy.business.interfaces.ReferenceService;
-import com.jonydog.refy.business.interfaces.SettingsService;
 import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.statesources.ReferencesState;
+import com.jonydog.refy.statesources.SettingsState;
 import com.jonydog.refy.util.AlertUtils;
 import com.jonydog.refy.util.RefyErrors;
 import com.jonydog.refy.util.StageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 
 @Component
@@ -27,7 +30,7 @@ public class NewReferenceController implements Initializable{
     @Autowired
     private ReferenceService referenceService;
     @Autowired
-    private SettingsService settingsService;
+    private SettingsState settingsState;
     @Autowired
     private ReferencesState referencesState;
     @Autowired
@@ -45,8 +48,10 @@ public class NewReferenceController implements Initializable{
     private TextArea observationsField;
     @FXML
     private Button addButton;
-
-    private String filePath;
+    @FXML
+    private AnchorPane dropArea;
+    @FXML
+    private Label fileLabel;
 
     @FXML
     private void backButtonClicked(){
@@ -58,13 +63,26 @@ public class NewReferenceController implements Initializable{
     private void chooseFileButtonClicked(){
 
         FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        String homeFolder = this.settingsState.getSettings().getHomeFolder();
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Add a file");
-        fileChooser.setSelectedExtensionFilter( pdfFilter);
-        fileChooser.setInitialDirectory( new File( this.settingsService.get(null).getHomeFolder() ) );
-        String fileName = fileChooser.showOpenDialog( this.stageManager.getModalStage() ).getAbsolutePath();
-        this.filePath = fileName;
+        fileChooser.getExtensionFilters().add(pdfFilter);
+        fileChooser.setInitialDirectory( new File( homeFolder ) );
+        File selectedFile = fileChooser.showOpenDialog( this.stageManager.getModalStage() );
+
+        String relativeFileName= selectedFile.getAbsolutePath().replace( this.settingsState.getSettings().getHomeFolder(), "" );
+
+        if( selectedFile.getAbsolutePath().startsWith(this.settingsState.getSettings().getHomeFolder()) ){
+            this.fileLabel.setText( relativeFileName.replace("\\","/") );
+        }
+        else{
+           File movedFile = this.promptFileMove(selectedFile);
+           if( movedFile!=null ){
+               String relativePath = movedFile.getAbsolutePath().replace( this.settingsState.getSettings().getHomeFolder(), "" );
+               this.fileLabel.setText( relativePath.replace("\\","/") );
+           }
+        }
     }
 
     @FXML
@@ -85,7 +103,7 @@ public class NewReferenceController implements Initializable{
         Reference reference = new Reference();
         reference.setTitle( this.titleField.getText() );
         reference.setAuthorsNames( this.authorsField.getText() );
-        reference.setFilePath( this.filePath );
+        reference.setFilePath( this.fileLabel.getText());
         reference.setKeywords(  this.keywordsField.getText() );
         reference.setLink( this.linkField.getText() );
         reference.setObservations(this.observationsField.getText());
@@ -107,7 +125,7 @@ public class NewReferenceController implements Initializable{
         Reference reference = new Reference();
         reference.setTitle( this.titleField.getText() );
         reference.setAuthorsNames( this.authorsField.getText() );
-        reference.setFilePath( this.filePath );
+        reference.setFilePath( this.fileLabel.getText() );
         reference.setKeywords(  this.keywordsField.getText() );
         reference.setLink( this.linkField.getText() );
         reference.setObservations(this.observationsField.getText());
@@ -128,7 +146,7 @@ public class NewReferenceController implements Initializable{
     public void prepareForm(Reference ref){
 
         this.authorsField.setText( ref.getAuthorsNames() );
-        this.filePath = ref.getFilePath();
+        this.fileLabel.setText(ref.getFilePath() );
         this.keywordsField.setText( ref.getKeywords() );
         this.titleField.setText( ref.getTitle() );
         this.linkField.setText( ref.getLink() );
@@ -139,7 +157,7 @@ public class NewReferenceController implements Initializable{
 
     public void clearForm(){
         this.authorsField.clear();
-        this.filePath = "";
+        this.fileLabel.setText("");
         this.linkField.clear();
         this.observationsField.clear();
         this.titleField.clear();
@@ -148,10 +166,74 @@ public class NewReferenceController implements Initializable{
         this.addButton.setText("Create");
     }
 
+    private boolean isFileInsideHomeFolderWithPopUp(File f){
+
+        RefyErrors errors = new RefyErrors();
+            if (  f.getAbsolutePath().startsWith(this.settingsState.getSettings().getHomeFolder()) ) {
+            return true;
+        }
+        else{
+            errors.addError("File is not inside home folder.");
+            AlertUtils.popUpAlert(
+                    errors, Alert.AlertType.ERROR,this.stageManager.getModalStage()
+            );
+            return false;
+        }
+    }
+
+
+    private File promptFileMove(File f){
+
+        DirectoryChooser fileChooser = new DirectoryChooser();
+        fileChooser.setTitle("Select destination folder");
+        fileChooser.setInitialDirectory( new File( this.settingsState.getSettings().getHomeFolder() ) );
+        File selectedDir = fileChooser.showDialog( this.stageManager.getModalStage() );
+
+        if( ! this.isFileInsideHomeFolderWithPopUp(selectedDir) ){
+            return null;
+        }
+
+        File destination = new File(selectedDir + "/"+ f.getName() );
+        try {
+            Files.copy( f.toPath(), destination.toPath() );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return destination;
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
 
+        this.dropArea.setOnDragDropped(
+                event -> {
+                    Dragboard db = event.getDragboard();
+                    if (db.hasFiles()) {
+                        if( this.isFileInsideHomeFolderWithPopUp(db.getFiles().get(0)) ) {
+                            this.fileLabel.setText(db.getFiles().get(0).getAbsolutePath().replace("\\","/") );
+                        }
+                    }
+                    /* let the source know whether the string was successfully
+                     * transferred and used */
+                    event.setDropCompleted(true);
+
+                    event.consume();
+                }
+        );
+
+        this.dropArea.setOnDragOver(
+                (event)->{
+
+                    if(event.getDragboard().hasFiles() && event.getDragboard().getFiles().get(0).getAbsolutePath().toLowerCase().endsWith(".pdf") ){
+                        event.acceptTransferModes( TransferMode.ANY );
+                    }
+
+                    event.consume();
+                }
+        );
     }
 
 }
