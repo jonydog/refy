@@ -37,18 +37,22 @@ public class ReferenceServiceImpl implements ReferenceService{
 
     private HashMap<String,Reference> termToRefsMapping;
     private ArrayList<Reference> allRefs;
+    private String previousHomeFolder="";
+
     @Getter
     private AtomicLong lastModified = new AtomicLong(0L);
+
 
     @Override
     public ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors) {
 
-        // if cached array is null
-        if(this.allRefs==null) {
+        // if cached array is null or home folder changed => reload refs from file
+        if(this.allRefs==null || !this.previousHomeFolder.equals(homeFolder) ) {
             Reference[] refArray = this.referenceDAO.getAllReferences(homeFolder);
             if(refArray!=null){
 
                 this.allRefs =  new ArrayList<>( Arrays.asList( refArray ) );
+                this.previousHomeFolder = homeFolder;
                 // init terms to references mapping
                 Executors.newSingleThreadExecutor().submit(()->{this.initTermsToRefsMapping();}  );
                 // init persistence job
@@ -65,6 +69,7 @@ public class ReferenceServiceImpl implements ReferenceService{
         return( this.allRefs  );
 
     }
+
 
     @Override
     public ArrayList<Reference> searchReferences(String searchTerm) {
