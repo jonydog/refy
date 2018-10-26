@@ -11,6 +11,7 @@ import com.sun.javafx.PlatformUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -39,6 +40,11 @@ public class SettingsDialogController implements Initializable {
     private TextField browserField;
     @FXML
     private TextField pdfReaderField;
+    @FXML
+    private Button browserButton;
+    @FXML
+    private Button pdfButton;
+
 
     @FXML
     public void selectFileButtonClicked(){
@@ -115,8 +121,20 @@ public class SettingsDialogController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         this.homeFolderField.setText( this.settingsState.getSettings().getHomeFolder() );
-        this.browserField.setText( this.settingsState.getSettings().getBrowserPath()  );
-        this.pdfReaderField.setText( this.settingsState.getSettings().getPdfReaderPath() );
+
+        if( PlatformUtil.isWindows() ) {
+            this.browserField.setText(this.settingsState.getSettings().getBrowserPath());
+            this.pdfReaderField.setText(this.settingsState.getSettings().getPdfReaderPath());
+        }
+        else{
+            this.pdfReaderField.setPromptText("macOS will use defautl application");
+            this.pdfReaderField.setDisable(true);
+            this.pdfButton.setDisable(true);
+
+            this.browserField.setPromptText("macOS will use default browser");
+            this.browserField.setDisable(true);
+            this.browserButton.setDisable(true);
+        }
     }
 
 }

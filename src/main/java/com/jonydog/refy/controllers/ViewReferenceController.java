@@ -8,6 +8,7 @@ import com.jonydog.refy.statesources.SettingsState;
 import com.jonydog.refy.util.AlertUtils;
 import com.jonydog.refy.util.RefyErrors;
 import com.jonydog.refy.util.StageManager;
+import com.sun.javafx.PlatformUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -16,6 +17,7 @@ import javafx.scene.control.TextArea;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -53,20 +55,8 @@ public class ViewReferenceController implements Initializable {
     private void linkButton(){
 
         String url = this.referencesState.getSelectedReference().get().getLink();
-        if( url==null ){
-            return;
-        }
-        ;
-        Settings s = this.settingsState.getSettings();
-        if( s.getBrowserPath()!=null && !s.getPdfReaderPath().isEmpty()    ){
 
-            try {
-                Runtime.getRuntime().exec( s.getBrowserPath() + " " + url  );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        this.openLinkInBrowser(url);
     }
 
     @FXML
@@ -79,20 +69,9 @@ public class ViewReferenceController implements Initializable {
             return;
         }
 
+
         File f = new File( this.settingsState.getSettings().getHomeFolder() + filePath);
-
-        System.out.println("File to be opened:"+f.getAbsolutePath());
-
-        Settings s = this.settingsState.getSettings();
-        if( s.getPdfReaderPath()!=null && !s.getPdfReaderPath().isEmpty() && f.exists()   ){
-            String command = s.getPdfReaderPath() + " " + "\"" + f.getAbsolutePath() + "\"" ;
-            try {
-                Runtime.getRuntime().exec( command );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        this.openPDFFile(f);
 
     }
 
@@ -119,6 +98,72 @@ public class ViewReferenceController implements Initializable {
         }
 
     }
+
+
+    private void openPDFFile(File f){
+
+        System.out.println("File to be opened:" + f.getAbsolutePath());
+
+        if(PlatformUtil.isWindows()) {
+
+            Settings s = this.settingsState.getSettings();
+            if(s.getPdfReaderPath() != null && !s.getPdfReaderPath().isEmpty() && f.exists()) {
+                String command = s.getPdfReaderPath() + " " + "\"" + f.getAbsolutePath() + "\"";
+                try {
+                    Runtime.getRuntime().exec(command);
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if(PlatformUtil.isMac() ){
+
+            String command[] = {"bash", "./open.sh",  f.getAbsolutePath()};
+            try {
+                Runtime.getRuntime().exec(command);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void openLinkInBrowser(String url){
+
+        if( url==null ){
+            return;
+        }
+        Settings settings = this.settingsState.getSettings();
+
+        if(PlatformUtil.isWindows() ){
+
+
+            if( settings.getBrowserPath()!=null && !settings.getPdfReaderPath().isEmpty()    ){
+
+                try {
+                    Runtime.getRuntime().exec( settings.getBrowserPath() + " " + url  );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if( PlatformUtil.isMac() ){
+
+            if(!url.startsWith("http")){
+                url = "http://" + url;
+            }
+
+
+            String command[] = {"bash", "./open.sh", url};
+            try {
+                Runtime.getRuntime().exec(command);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
