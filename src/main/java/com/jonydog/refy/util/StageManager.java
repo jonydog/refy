@@ -14,9 +14,13 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.FileSystems;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class StageManager {
@@ -119,26 +123,27 @@ public class StageManager {
 	}
 	
 	public void loadAllViews() throws IOException{
-				
-		Enumeration<URL> l = this.getClass().getClassLoader().getResources("");	
-		boolean found = false;
-		List<File> packageDirs = new LinkedList<>();
-		while( l.hasMoreElements() && (!found) ){
-			URL u = l.nextElement();
-			logger.debug(u);
-			// get the filepath of this packa
-            System.out.println("Path: "+u.getPath());
-			if( u.getPath().contains("refy") ){
-				packageDirs.add( new  File(  u.getPath() + "/fxml" ) );
-			}
-		}
-		
-		// get only the .fxml files
-		List<File> fxmlFiles = new LinkedList<>();
-		for( File packageDir : packageDirs ){
-			fxmlFiles.addAll( Arrays.asList( packageDir.listFiles( f -> f.getAbsolutePath().endsWith(".fxml"))) );
-		}
-		
+
+
+        List<File> allFiles = new LinkedList<>();
+        Files.walk(Paths.get( (new File(this.getClass().getClassLoader().getResource("").getPath()) ).getAbsolutePath()  ) )
+                .filter( Files::isRegularFile )
+                .forEach(
+                        (p) ->{
+                            allFiles.add(  p.toFile() );
+                        }
+                );
+        System.out.println( allFiles );
+
+        List<File> fxmlFiles = new ArrayList<>();
+        for(File f : allFiles){
+            if( f.getAbsolutePath().endsWith(".fxml") ){
+                fxmlFiles.add( f );
+            }
+        }
+        System.out.println( "fxml files" );
+        System.out.println( fxmlFiles );
+
 		// add the corresponding nodes to the nodeMap
 		for(File f:fxmlFiles ){
 			System.out.println(f.getAbsolutePath());

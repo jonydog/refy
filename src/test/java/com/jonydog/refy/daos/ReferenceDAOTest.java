@@ -36,9 +36,9 @@ public class ReferenceDAOTest {
         refs[0] = ref1;
         refs[1] = ref2;
 
-        this.referenceDAO.save( refs, "", new RefyErrors());
+        this.referenceDAO.save( refs, "./", new RefyErrors());
 
-        Reference[] refsBack = this.referenceDAO.getAllReferences("");
+        Reference[] refsBack = this.referenceDAO.getAllReferences("./");
         Assert.assertEquals( refsBack[1].getAuthorsNames(),  "Digoo Dof" );
     }
 

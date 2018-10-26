@@ -31,6 +31,11 @@ public class MainApp extends Application {
     private ConfigurableApplicationContext springContext;
     private Parent rootNode;
 
+    public static void main(String[] args){
+
+        MainApp.launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
 

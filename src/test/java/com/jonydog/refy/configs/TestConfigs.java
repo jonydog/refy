@@ -16,7 +16,8 @@ import org.springframework.context.annotation.PropertySource;
                 "com.jonydog.refy.business",
                 "com.jonydog.refy.daos",
                 "com.jonydog.refy.statesources",
-                "com.jonydog.refy.configs"
+                "com.jonydog.refy.configs",
+                "com.jonydog.refy.jobs"
         }
 )
 public class TestConfigs {
