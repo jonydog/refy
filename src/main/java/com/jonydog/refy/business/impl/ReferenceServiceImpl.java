@@ -43,11 +43,14 @@ public class ReferenceServiceImpl implements ReferenceService{
     private AtomicLong lastModified = new AtomicLong(0L);
 
 
+
     @Override
-    public ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors) {
+    public ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors,boolean ...fromFile) {
+
+        boolean readFromFile = fromFile.length>0 ? fromFile[0] : false;
 
         // if cached array is null or home folder changed => reload refs from file
-        if(this.allRefs==null || !this.previousHomeFolder.equals(homeFolder) ) {
+        if(this.allRefs==null || !this.previousHomeFolder.equals(homeFolder) || readFromFile) {
             Reference[] refArray = this.referenceDAO.getAllReferences(homeFolder);
             if(refArray!=null){
 

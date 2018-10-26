@@ -38,9 +38,13 @@ public class ReferencesState extends StateSource {
         // get all refs
         this.currentReferences.clear();
         this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ) );
-
     }
 
+    public void refreshFromFile(RefyErrors errors){
+        // get all refs
+        this.currentReferences.clear();
+        this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ,true) );
+    }
 
     @Override
     public void init() {

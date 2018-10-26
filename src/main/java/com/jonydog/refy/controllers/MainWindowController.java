@@ -44,10 +44,10 @@ public class MainWindowController implements Initializable {
     private TableView<Reference> mainTable;
     @FXML
     private TextField searchField;
-
     @FXML
     private Button settingsButton;
-
+    @FXML
+    private Button refreshButton;
 
     @FXML
     private void settingsButtonClicked() {
@@ -58,6 +58,18 @@ public class MainWindowController implements Initializable {
         this.stageManager.getModalStage().setScene(this.settingsScene);
         this.stageManager.getModalStage().setTitle("Settings");
         this.stageManager.getModalStage().showAndWait();
+    }
+
+
+    @FXML
+    private void refreshButtonClicked(){
+
+        RefyErrors errors = new RefyErrors();
+        this.referencesState.refreshFromFile(errors);
+
+        if( errors.hasErrors() ){
+            AlertUtils.popUpAlert(errors, Alert.AlertType.ERROR,this.stageManager.getMainStage());
+        }
     }
 
     @FXML

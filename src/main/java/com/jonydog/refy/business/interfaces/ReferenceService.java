@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public interface ReferenceService {
 
-    ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors);
+    ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors,boolean ...fromFile);
 
     ArrayList<Reference> searchReferences(String searchTerm);
 
