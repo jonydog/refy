@@ -129,7 +129,7 @@ public class StageManager {
 			// get the filepath of this packa
             System.out.println("Path: "+u.getPath());
 			if( u.getPath().contains("refy") ){
-				packageDirs.add( new  File(  u.getPath() + "\\fxml" ) );
+				packageDirs.add( new  File(  u.getPath() + "/fxml" ) );
 			}
 		}
 		
