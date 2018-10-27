@@ -18,7 +18,7 @@
          </font></Label>
       <Button layoutX="509.0" layoutY="175.0" mnemonicParsing="false" onAction="#pdfButton" text="View PDF" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="175.0" />
       <Button fx:id="backButton" layoutX="533.0" layoutY="25.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="25.0" prefWidth="66.0" text="Back" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
-      <TextArea fx:id="observationsField" layoutX="25.0" layoutY="181.0" prefHeight="144.0" prefWidth="550.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="206.0">
+      <TextArea fx:id="observationsField" layoutX="25.0" layoutY="181.0" prefHeight="144.0" prefWidth="550.0" wrapText="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="206.0">
          <font>
             <Font size="16.0" />
          </font></TextArea>
