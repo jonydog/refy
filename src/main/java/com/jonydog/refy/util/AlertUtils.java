@@ -43,7 +43,7 @@ public class AlertUtils {
         alert.show();
     }
 
-    public static void confirmationAlert(Consumer<Void> callback, String title, String headerText, String contentText,String okButtonText, String cancelButtonText, Stage ownerStage){
+    public static void confirmationAlert(Consumer<Void> callback,Consumer<Void> cancelCallback, String title, String headerText, String contentText,String okButtonText, String cancelButtonText, Stage ownerStage){
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -58,7 +58,7 @@ public class AlertUtils {
         if (result.get() == ButtonType.OK){
             callback.accept(null);
         } else {
-            //do nothing
+            cancelCallback.accept(null);
         }
     }
 

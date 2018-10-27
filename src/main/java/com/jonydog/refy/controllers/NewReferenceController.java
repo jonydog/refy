@@ -222,6 +222,7 @@ public class NewReferenceController implements Initializable{
                         this.authorsField.setText( info.getAuthor() );
                         this.keywordsField.setText( info.getKeywords() + " " + info.getSubject() );
                     },
+                    (d)->{},
                     "PDF Metadata",
                     "Accept metadata?",
                     "",

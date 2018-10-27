@@ -25,6 +25,7 @@ public class MainWindowController implements Initializable {
 
     @Autowired
     private StageManager stageManager;
+
     @Autowired
     private NewReferenceController newReferenceController;
     @Autowired
@@ -99,6 +100,7 @@ public class MainWindowController implements Initializable {
                     this.referenceService.removeReference(selectedItem, errors);
                     this.referencesState.refreshState(errors);
                 },
+                (d)->{},
                 "Delete reference",
                 "Do you confirm?",
                 "Do you want to remove '" + selectedItem.getTitle(),
@@ -180,6 +182,8 @@ public class MainWindowController implements Initializable {
             });
             return row;
         });
+
+
 
     }
 }

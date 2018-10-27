@@ -1,6 +1,7 @@
 package com.jonydog.refy.app;
 
 import com.jonydog.refy.jobs.ReferenceKeeper;
+import com.jonydog.refy.util.AlertUtils;
 import com.jonydog.refy.util.StageManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @ComponentScan(
@@ -49,6 +51,21 @@ public class MainApp extends Application {
         stage.show();
 
 
+        stage.setOnCloseRequest(event -> {
+
+            AlertUtils.confirmationAlert(
+                    (dummy)->{},
+                    (dummy)->{event.consume();},
+                    "Exi",
+                    "Exit Refy",
+                    "Do you confirm exit from Refy?",
+                    "Exit",
+                    "Cancel",
+                    stage
+            );
+
+        });
+
     }
 
 
@@ -76,6 +93,10 @@ public class MainApp extends Application {
 
     @Override
     public void stop(){
+
+        ReferenceKeeper referenceKeeper = this.springContext.getBean(ReferenceKeeper.class);
+
+        Executors.newSingleThreadExecutor().submit(  referenceKeeper::writeReferencesToFile  );
 
         this.springContext.getBean(ReferenceKeeper.class).getIsAppClosed().set(true);
 

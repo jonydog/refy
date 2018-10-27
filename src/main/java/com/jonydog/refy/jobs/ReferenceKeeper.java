@@ -43,21 +43,25 @@ public class ReferenceKeeper {
 
     }
 
+    public synchronized void writeReferencesToFile(){
 
-    private void persistenceJob(){
+        RefyErrors errors = new RefyErrors();
+        ArrayList<Reference> refsList = this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors);
+        this.referenceDAO.save(refsList.toArray(new Reference[refsList.size()]), this.settingsState.getSettings().getHomeFolder(), errors);
+
+    }
+
+    public void persistenceJob(){
 
         System.out.println("Persistence job");
 
-        while( ! this.isAppClosed.get()) {
+        do {
 
             System.out.println("Running persistence job");
             if( this.lastWritten.get() < this.referenceService.getLastModified().get() ) {
 
                 System.out.println("Writing to file");
-                RefyErrors errors = new RefyErrors();
-                ArrayList<Reference> refsList = this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors);
-                this.referenceDAO.save(refsList.toArray(new Reference[refsList.size()]), this.settingsState.getSettings().getHomeFolder(), errors);
-
+                this.writeReferencesToFile();
                 //update last written time
                 this.lastWritten.set( System.currentTimeMillis() );
             }
@@ -70,9 +74,12 @@ public class ReferenceKeeper {
                 e.printStackTrace();
             }
 
+        } while( ! this.isAppClosed.get());
+
+        if( this.isAppClosed.get() ){
+            System.exit(0);
         }
 
-        System.exit(0);
     }
 
 
