@@ -15,6 +15,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,12 +77,14 @@ public class NewReferenceController implements Initializable{
 
         if( selectedFile.getAbsolutePath().startsWith(this.settingsState.getSettings().getHomeFolder()) ){
             this.fileLabel.setText( relativeFileName.replace("\\","/") );
+            this.extractMetadataFromPdf(selectedFile);
         }
         else{
            File movedFile = this.promptFileMove(selectedFile);
            if( movedFile!=null ){
                String relativePath = movedFile.getAbsolutePath().replace( this.settingsState.getSettings().getHomeFolder(), "" );
                this.fileLabel.setText( relativePath.replace("\\","/") );
+               this.extractMetadataFromPdf(movedFile);
            }
         }
     }
@@ -204,6 +208,36 @@ public class NewReferenceController implements Initializable{
 
     }
 
+
+    private void extractMetadataFromPdf(File f){
+
+        PDDocument doc = null;
+        try {
+            doc = PDDocument.load(f);
+            PDDocumentInformation info = doc.getDocumentInformation();
+
+            AlertUtils.confirmationAlert(
+                    (a)->{
+                        this.titleField.setText( info.getTitle() );
+                        this.authorsField.setText( info.getAuthor() );
+                        this.keywordsField.setText( info.getKeywords() + " " + info.getSubject() );
+                    },
+                    "PDF Metadata",
+                    "Accept metadata?",
+                    "",
+                    "Yes",
+                    "No",
+                    this.stageManager.getModalStage()
+            );
+
+            doc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -212,8 +246,19 @@ public class NewReferenceController implements Initializable{
                 event -> {
                     Dragboard db = event.getDragboard();
                     if (db.hasFiles()) {
-                        if( this.isFileInsideHomeFolderWithPopUp(db.getFiles().get(0)) ) {
+                        File selectedFile = db.getFiles().get(0);
+                        if( selectedFile.getAbsolutePath().startsWith(this.settingsState.getSettings().getHomeFolder()) ){
+
                             this.fileLabel.setText(db.getFiles().get(0).getAbsolutePath().replace("\\","/") );
+                            this.extractMetadataFromPdf(db.getFiles().get(0));
+                        }
+                        else{
+                            File movedFile = this.promptFileMove(selectedFile);
+                            if( movedFile!=null ){
+                                String relativePath = movedFile.getAbsolutePath().replace( this.settingsState.getSettings().getHomeFolder(), "" );
+                                this.fileLabel.setText( relativePath.replace("\\","/") );
+                                this.extractMetadataFromPdf(movedFile);
+                            }
                         }
                     }
                     /* let the source know whether the string was successfully

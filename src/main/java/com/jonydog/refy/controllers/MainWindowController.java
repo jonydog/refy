@@ -102,6 +102,8 @@ public class MainWindowController implements Initializable {
                 "Delete reference",
                 "Do you confirm?",
                 "Do you want to remove '" + selectedItem.getTitle(),
+                "Delete",
+                "Cancel",
                 this.stageManager.getMainStage()
         );
 

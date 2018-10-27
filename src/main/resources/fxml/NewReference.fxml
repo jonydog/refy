@@ -6,18 +6,31 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="532.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonydog.refy.controllers.NewReferenceController">
    <children>
       <Group layoutX="28.0" layoutY="30.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="33.0">
          <children>
-            <TextArea fx:id="titleField" layoutY="24.0" prefHeight="71.0" prefWidth="573.0" promptText="Title" />
-            <TextArea fx:id="authorsField" layoutY="121.0" prefHeight="74.0" prefWidth="573.0" promptText="Authors" />
-            <TextArea fx:id="keywordsField" layoutY="222.0" prefHeight="49.0" prefWidth="573.0" promptText="keyword1 keyword2" />
+            <TextArea fx:id="titleField" layoutY="24.0" prefHeight="71.0" prefWidth="573.0" promptText="Title" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font></TextArea>
+            <TextArea fx:id="authorsField" layoutY="121.0" prefHeight="74.0" prefWidth="573.0" promptText="Authors" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font></TextArea>
+            <TextArea fx:id="keywordsField" layoutY="222.0" prefHeight="49.0" prefWidth="573.0" promptText="keyword1 keyword2" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font></TextArea>
             <Label layoutY="3.0" text="Title" />
             <Label layoutX="-3.0" layoutY="203.0" text="Keywords" />
             <Label layoutX="-3.0" layoutY="104.0" text="Authors" />
-            <TextArea fx:id="observationsField" layoutY="310.0" prefHeight="106.0" prefWidth="573.0" />
+            <TextArea fx:id="observationsField" layoutY="310.0" prefHeight="106.0" prefWidth="573.0" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font></TextArea>
             <Label layoutX="-3.0" layoutY="283.0" text="Observations" />
          </children>
    </Group>

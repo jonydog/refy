@@ -62,8 +62,12 @@ public class SettingsDialogController implements Initializable {
         this.assignAproppriateExtension(fileChooser);
 
         fileChooser.setTitle("Choose favorite Web browser");
-        String browserFileName = fileChooser.showOpenDialog( this.stageManager.getModalStage() ).getAbsolutePath();
-        this.browserField.setText( browserFileName );
+        try {
+            String browserFileName = fileChooser.showOpenDialog(this.stageManager.getModalStage()).getAbsolutePath();
+            this.browserField.setText(browserFileName);
+        }catch (Exception e) {
+
+        }
     }
 
     @FXML
@@ -71,10 +75,14 @@ public class SettingsDialogController implements Initializable {
 
         FileChooser fileChooser = new FileChooser();
         this.assignAproppriateExtension(fileChooser);
-
         fileChooser.setTitle("Choose favorite PDF reader");
-        String browserFileName = fileChooser.showOpenDialog( this.stageManager.getModalStage() ).getAbsolutePath();
-        this.pdfReaderField.setText( browserFileName );
+        try {
+            String browserFileName = fileChooser.showOpenDialog(this.stageManager.getModalStage()).getAbsolutePath();
+            this.pdfReaderField.setText(browserFileName);
+        }
+        catch (Exception e){
+
+        }
     }
 
     @FXML
