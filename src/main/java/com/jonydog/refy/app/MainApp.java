@@ -35,6 +35,8 @@ public class MainApp extends Application {
 
     public static void main(String[] args){
 
+        MainApp.nudge4J();
+
         MainApp.launch(args);
     }
 
@@ -68,9 +70,22 @@ public class MainApp extends Application {
 
     }
 
+    private static void nudge4J(){
+
+        // nudge4j - bootstrap
+        try {
+            new javax.script.ScriptEngineManager()
+                    .getEngineByName("JavaScript")
+                    .eval("load('https://lorenzoongithub.github.io/nudge4j/twigs/n4j.boot.js')");
+        } catch (javax.script.ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public void init(){
+
         this.springContext = SpringApplication.run(MainApp.class);
 
         //init state sources

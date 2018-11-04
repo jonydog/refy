@@ -29,9 +29,8 @@ public class ReferenceDAO {
                 return refs;
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        catch (Exception e) {
+            return new Reference[0];
         }
     }
 

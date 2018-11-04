@@ -138,6 +138,13 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
+    private void searchButtonClicked(){
+
+        this.referencesState.refreshState(new RefyErrors());
+
+    }
+
+    @FXML
     private void viewButtonClicked() {
 
         Reference selectedItem = this.mainTable.getSelectionModel().getSelectedItem();
@@ -183,7 +190,8 @@ public class MainWindowController implements Initializable {
             return row;
         });
 
-
+        // bind search text to state property
+        this.referencesState.getCurrentSearchText().bind( this.searchField.textProperty()    );
 
     }
 }

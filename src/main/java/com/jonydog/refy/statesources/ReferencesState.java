@@ -5,6 +5,7 @@ import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.util.RefyErrors;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class ReferencesState extends StateSource {
     private ObservableList<Reference> currentReferences;
 
     @Getter
+    private SimpleStringProperty currentSearchText;
+
+    @Getter
     private SimpleObjectProperty<Reference> selectedReference;
 
     @Getter
@@ -37,7 +41,12 @@ public class ReferencesState extends StateSource {
 
         // get all refs
         this.currentReferences.clear();
-        this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ) );
+        if( this.currentSearchText.get().equals("") ){
+            this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ) );
+        }
+        else{
+            this.currentReferences.addAll( this.referenceService.searchReferences( this.currentSearchText.get() )  );
+        }
     }
 
     public void refreshFromFile(RefyErrors errors){
@@ -56,8 +65,7 @@ public class ReferencesState extends StateSource {
         this.selectedReference = new SimpleObjectProperty<>();
         this.editMode = new SimpleBooleanProperty(false);
 
-        //load
-        //this.currentReferences.addAll( this.referenceService.getAllReferences( new RefyErrors() ) );
-        //this.currentReferences.addAll( this.referenceService.getAllReferences( new RefyErrors() ) );
+        this.currentSearchText = new SimpleStringProperty();
+
     }
 }

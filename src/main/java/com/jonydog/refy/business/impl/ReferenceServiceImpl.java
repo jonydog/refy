@@ -12,12 +12,10 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Component
 public class ReferenceServiceImpl implements ReferenceService{
@@ -35,7 +33,7 @@ public class ReferenceServiceImpl implements ReferenceService{
     private Validator validator;
 
 
-    private HashMap<String,Reference> termToRefsMapping;
+    private HashMap<String,List<Reference>> termToRefsMapping;
     private ArrayList<Reference> allRefs;
     private String previousHomeFolder="";
 
@@ -75,8 +73,10 @@ public class ReferenceServiceImpl implements ReferenceService{
 
 
     @Override
-    public ArrayList<Reference> searchReferences(String searchTerm) {
-        return null;
+    public List<Reference> searchReferences(String searchTerm) {
+
+        return this.termToRefsMapping.get(searchTerm);
+
     }
 
     @Override
@@ -130,14 +130,52 @@ public class ReferenceServiceImpl implements ReferenceService{
 
     private void initTermsToRefsMapping(){
         System.out.println("Init terms to refs mapping");
-        Thread.currentThread().interrupt();
 
+        this.termToRefsMapping = new HashMap<>();
+        for( Reference r : this.allRefs){
+
+            List<String> terms = this.extractAllTermsFromReference(r);
+            for(String s : terms) {
+
+                if( this.termToRefsMapping.get( s )==null ){
+                    ArrayList<Reference> refList = new ArrayList<>();
+                    refList.add(r);
+                    this.termToRefsMapping.put(s,refList);
+                }
+                else{
+                    this.termToRefsMapping.get(s).add(r);
+                }
+
+            }
+        }
+
+        Thread.currentThread().interrupt();
     }
 
     private void updateTermsToRefsMapping(Reference newref){
         System.out.println("Init terms to refs mapping");
         Thread.currentThread().interrupt();
 
+    }
+
+
+    private List<String> extractAllTermsFromReference(Reference ref){
+
+        ArrayList<String> extractedTerms = new ArrayList<>();
+
+        // title terms
+        String title = ref.getTitle().replaceAll(",","");
+        extractedTerms.addAll( Arrays.asList( title.split(" ") ) );
+
+        // author terms
+        String authors = ref.getAuthorsNames().replaceAll(",","");
+        extractedTerms.addAll( Arrays.asList( authors.split(" ") ) );
+
+        // keywords terms
+        String keywords = ref.getKeywords().replaceAll(",", "");
+        extractedTerms.addAll( Arrays.asList( keywords.split(" ") ) );
+
+        return extractedTerms.stream().map( (s)->s.toLowerCase() ).collect(Collectors.toList());
     }
 
 }

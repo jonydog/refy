@@ -4,13 +4,14 @@ import com.jonydog.refy.model.Reference;
 import com.jonydog.refy.util.RefyErrors;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public interface ReferenceService {
 
     ArrayList<Reference> getAllReferences(String homeFolder, RefyErrors errors,boolean ...fromFile);
 
-    ArrayList<Reference> searchReferences(String searchTerm);
+    List<Reference> searchReferences(String searchTerm);
 
     void addReference(Reference reference, RefyErrors errors);
 
