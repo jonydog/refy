@@ -138,11 +138,11 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void searchButtonClicked(){
+    private void clearButtonClicked(){
 
-        this.referencesState.refreshState(new RefyErrors());
-
+        this.searchField.setText("");
     }
+
 
     @FXML
     private void viewButtonClicked() {
@@ -192,6 +192,13 @@ public class MainWindowController implements Initializable {
 
         // bind search text to state property
         this.referencesState.getCurrentSearchText().bind( this.searchField.textProperty()    );
+
+        //search on each change
+        this.searchField.textProperty().addListener(
+                ((observable, oldValue, newValue) -> {
+                    this.referencesState.refreshState(new RefyErrors());
+                })
+        );
 
     }
 }

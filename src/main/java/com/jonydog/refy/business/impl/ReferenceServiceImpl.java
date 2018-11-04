@@ -158,6 +158,15 @@ public class ReferenceServiceImpl implements ReferenceService{
 
     }
 
+    private  List<String> extractAllPrefixesFromString(String s){
+
+        List<String> list = new ArrayList<>();
+        for( int i=0; i<s.length(); i++  ){
+
+            list.add( s.substring(0,s.length()-i) );
+        }
+        return  list;
+    }
 
     private List<String> extractAllTermsFromReference(Reference ref){
 
@@ -175,7 +184,11 @@ public class ReferenceServiceImpl implements ReferenceService{
         String keywords = ref.getKeywords().replaceAll(",", "");
         extractedTerms.addAll( Arrays.asList( keywords.split(" ") ) );
 
-        return extractedTerms.stream().map( (s)->s.toLowerCase() ).collect(Collectors.toList());
+        return extractedTerms.stream()
+                .map( (s)->s.toLowerCase() )
+                .map( this::extractAllPrefixesFromString )
+                .flatMap( l->l.stream() )
+                .collect(Collectors.toList());
     }
 
 }

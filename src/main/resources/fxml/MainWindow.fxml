@@ -19,7 +19,7 @@
       <TextField fx:id="searchField" layoutX="25.0" layoutY="20.0" prefHeight="25.0" prefWidth="195.0" promptText="Authors, titles, keywords..." AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
       <Button fx:id="settingsButton" layoutX="607.0" layoutY="489.0" mnemonicParsing="false" onAction="#settingsButtonClicked" prefHeight="30.0" prefWidth="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0" />
       <Button fx:id="deleteButton" layoutX="25.0" layoutY="488.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="30.0" prefWidth="78.0" text="Delete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="25.0" />
-      <Button layoutX="227.0" layoutY="25.0" mnemonicParsing="false" onAction="#searchButtonClicked" prefHeight="25.0" prefWidth="63.0" text="Search" AnchorPane.leftAnchor="225.0" />
       <Button fx:id="refreshButton" layoutX="460.0" layoutY="25.0" mnemonicParsing="false" onAction="#refreshButtonClicked" prefHeight="25.0" prefWidth="70.0" text="Refresh" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="25.0" />
+      <Button layoutX="228.0" layoutY="25.0" mnemonicParsing="false" onAction="#clearButtonClicked" prefHeight="26.0" prefWidth="54.0" text="Clear" AnchorPane.leftAnchor="228.0" />
    </children>
 </AnchorPane>
