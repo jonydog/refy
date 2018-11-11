@@ -43,7 +43,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        StageManager.getInstance().setPrimaryStage(stage);
+        this.springContext.getBean(StageManager.class).setPrimaryStage(stage);
 
         // TODO Auto-generated method stub
         Scene scene = new Scene((Parent) this.rootNode, 900, 900);
@@ -94,9 +94,9 @@ public class MainApp extends Application {
         }*/
 
         try {
-            StageManager.getInstance().setApplicationContext(springContext);
-            StageManager.getInstance().loadAllViews();
-            this.rootNode = StageManager.getInstance().getView("MainWindow.fxml");
+            this.springContext.getBean(StageManager.class).setApplicationContext(springContext);
+            this.springContext.getBean(StageManager.class).loadAllViews();
+            this.rootNode = this.springContext.getBean(StageManager.class).getView("MainWindow.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }

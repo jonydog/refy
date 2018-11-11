@@ -11,9 +11,12 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,6 +29,10 @@ import java.util.List;
 public class StageManager {
 	
 	final static Logger logger = Logger.getLogger(StageManager.class);
+
+	private String workingMode; // "IDE" or "JAR"
+
+    private ResourceLoader resourceLoader;
 	
 	//Main stage
 	@Getter
@@ -45,13 +52,15 @@ public class StageManager {
 	//Spring application  context
 	private ApplicationContext applicationContext;
 	
-	private StageManager() throws IOException{
+	private StageManager(String workingMode,ResourceLoader resourceLoader) throws IOException{
 		this.nodeMap = new HashMap<String, Parent>();
+		this.workingMode = workingMode;
+		this.resourceLoader = resourceLoader;
 	}
 	
-	public static StageManager getInstance() throws IOException{
+	public static StageManager getInstance(String workingMode, ResourceLoader resourceLoader) throws IOException{
 		if(instance==null){
-			instance = new StageManager();
+			instance = new StageManager(workingMode, resourceLoader);
 		}
 		return instance;
 	}
@@ -125,39 +134,73 @@ public class StageManager {
 	public void loadAllViews() throws IOException{
 
 
+
         List<File> allFiles = new LinkedList<>();
-        Files.walk(Paths.get( (new File(this.getClass().getClassLoader().getResource("").getPath()) ).getAbsolutePath()  ) )
-                .filter( Files::isRegularFile )
-                .forEach(
-                        (p) ->{
-                            allFiles.add(  p.toFile() );
-                        }
-                );
-        System.out.println( allFiles );
+        if( this.workingMode.equals("IDE") ) {
+            Files.walk(Paths.get((new File(this.getClass().getClassLoader().getResource("").getPath())).getAbsolutePath()))
+                    .filter(Files::isRegularFile)
+                    .forEach(
+                            (p) -> {
+                                allFiles.add(p.toFile());
+                            }
+                    );
 
-        List<File> fxmlFiles = new ArrayList<>();
-        for(File f : allFiles){
-            if( f.getAbsolutePath().endsWith(".fxml") ){
-                fxmlFiles.add( f );
+            System.out.println( allFiles );
+
+            List<File> fxmlFiles = new ArrayList<>();
+            for(File f : allFiles){
+                if( f.getAbsolutePath().endsWith(".fxml") ){
+                    fxmlFiles.add( f );
+                }
             }
-        }
-        System.out.println( "fxml files" );
-        System.out.println( fxmlFiles );
+            System.out.println( "fxml files" );
+            System.out.println( fxmlFiles );
 
-		// add the corresponding nodes to the nodeMap
-		for(File f:fxmlFiles ){
-			System.out.println(f.getAbsolutePath());
-			String justName = f.getAbsolutePath().substring( f.getAbsolutePath().lastIndexOf(FileSystems.getDefault().getSeparator())+1 , f.getAbsolutePath().length() );
-			System.out.println("justName: " + justName);
-			FXMLLoader fxmlLoader = new FXMLLoader(f.toURI().toURL());
-			fxmlLoader.setControllerFactory(this.applicationContext::getBean);
-			Parent n = fxmlLoader.load();
-			if(n==null){
-				logger.debug("Node is null");
-			}
-			logger.debug("Loaded view: " + justName );
-			this.nodeMap.put(justName,  n );
-		}
+            // add the corresponding nodes to the nodeMap
+            for(File f:fxmlFiles ){
+                System.out.println(f.getAbsolutePath());
+                String justName = f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf(FileSystems.getDefault().getSeparator()) + 1, f.getAbsolutePath().length());
+                System.out.println("justName: " + justName);
+                FXMLLoader fxmlLoader = new FXMLLoader(f.toURI().toURL()   );
+                fxmlLoader.setControllerFactory(this.applicationContext::getBean);
+                Parent n = fxmlLoader.load();
+
+                if(n==null){
+                    logger.debug("Node is null");
+                }
+                logger.debug("Loaded view: " + justName );
+                this.nodeMap.put(justName,  n );
+            }
+
+        }
+        else{
+
+            String[] fxmlFileNames = {
+                    "MainWindow.fxml",
+                    "NewReference.fxml",
+                    "SettingsDialog.fxml",
+                    "ViewReference.fxml"
+            };
+
+            for( String s : fxmlFileNames) {
+
+                File temp = new File(s);
+
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setControllerFactory(this.applicationContext::getBean);
+                InputStream is = new FileInputStream(temp);
+                Parent n = fxmlLoader.load(is);
+
+                if(n==null){
+                    logger.debug("Node is null");
+                }
+                logger.debug("Loaded view: " + s );
+                this.nodeMap.put(s,  n );
+
+            }
+
+    }
+
 	}
 
 }

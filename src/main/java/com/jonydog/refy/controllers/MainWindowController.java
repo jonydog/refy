@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -159,7 +161,12 @@ public class MainWindowController implements Initializable {
     private void styleSomeElements() {
 
         File imageFile = new File("images/tools.png");
-        Image image = new Image(imageFile.getPath());
+        Image image = null;
+        try {
+            image = new Image( new FileInputStream(imageFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         ImageView imageView = new ImageView(image);
         this.settingsButton.setGraphic(imageView);
     }

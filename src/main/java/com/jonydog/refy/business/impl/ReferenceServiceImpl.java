@@ -72,10 +72,11 @@ public class ReferenceServiceImpl implements ReferenceService{
     }
 
 
+
     @Override
     public List<Reference> searchReferences(String searchTerm) {
 
-        return this.termToRefsMapping.get(searchTerm);
+        return this.termToRefsMapping.get(searchTerm).stream().distinct().collect(Collectors.toList());
 
     }
 
