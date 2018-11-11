@@ -184,7 +184,7 @@ public class StageManager {
 
             for( String s : fxmlFileNames) {
 
-                File temp = new File(s);
+                File temp = new File( "fxml/" + s);
 
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setControllerFactory(this.applicationContext::getBean);
