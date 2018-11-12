@@ -45,7 +45,7 @@ public class ReferencesState extends StateSource {
             this.currentReferences.addAll( this.referenceService.getAllReferences(this.settingsState.getSettings().getHomeFolder(), errors ) );
         }
         else{
-            this.currentReferences.addAll( this.referenceService.searchReferences( this.currentSearchText.get() )  );
+            this.currentReferences.addAll( this.referenceService.searchReferences( this.currentSearchText.get().toLowerCase() )  );
         }
     }
 
