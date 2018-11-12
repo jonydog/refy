@@ -45,12 +45,13 @@ public class ReferenceDAO {
 
         File file = new File(homeFolder+"/"+REFY_FILENAME);
 
-        this.makeFileInvisible(file);
+        //this.makeFileInvisible(file);
 
         try {
-            System.out.println("File written:"+file.getAbsolutePath());
             this.objectMapper.writeValue(file, refs);
+            System.out.println("File written:"+file.getAbsolutePath());
         } catch (IOException e) {
+            e.printStackTrace();
             errors.addError(
                     "Could not save to file"
             );
@@ -58,7 +59,7 @@ public class ReferenceDAO {
 
     }
 
-
+    /** not used for now, have to find workaround to be able to read hidden files **/
     private void makeFileInvisible(File f){
 
         if(PlatformUtil.isWindows()) {
