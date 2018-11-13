@@ -2,6 +2,7 @@ package com.jonydog.refy.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jonydog.refy.util.StageManager;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import java.io.IOException;
 @Configuration
 public class FxConfiguration {
 
+    @Getter
     @Value("${refy.working-mode}")
     private String workingMode;
 

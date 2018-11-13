@@ -1,5 +1,6 @@
 package com.jonydog.refy.app;
 
+import com.jonydog.refy.configs.FxConfiguration;
 import com.jonydog.refy.jobs.ReferenceKeeper;
 import com.jonydog.refy.util.AlertUtils;
 import com.jonydog.refy.util.StageManager;
@@ -34,8 +35,6 @@ public class MainApp extends Application {
     private Parent rootNode;
 
     public static void main(String[] args){
-
-        MainApp.nudge4J();
 
         MainApp.launch(args);
     }
@@ -92,6 +91,14 @@ public class MainApp extends Application {
         /*for( StateSource s : this.springContext.getBeansOfType(StateSource.class).values() ){
             s.initStateSource();
         }*/
+
+        if( this.springContext.getBean( FxConfiguration.class ).getWorkingMode().equals("IDE") ){
+            System.out.println("Working mode: IDE");
+            MainApp.nudge4J();
+        }
+        else{
+            System.out.println("Working mode: JAR");
+        }
 
         try {
             this.springContext.getBean(StageManager.class).setApplicationContext(springContext);
